@@ -1,5 +1,5 @@
-const express = require('express');
 const admin = require('firebase-admin');
+const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -7,12 +7,23 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Initialize Firebase Admin
-admin.initializeApp({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-});
+// Handle private key formatting
+let privateKey = process.env.FIREBASE_PRIVATE_KEY;
+if (privateKey && privateKey.startsWith('"')) {
+    privateKey = JSON.parse(privateKey);
+}
+
+try {
+    admin.initializeApp({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        privateKey: privateKey,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    });
+    console.log('Firebase initialized successfully');
+} catch (error) {
+    console.error('Firebase initialization error:', error);
+    process.exit(1);
+}
 
 const db = admin.firestore();
 
