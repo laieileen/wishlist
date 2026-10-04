@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "Wishlist Saver",
+    "version": "1.0",
+    "description": "Save products to your wishlist",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "Save to Wishlist"
+    },
+    "host_permissions": [
+        "<all_urls>"
+    ]
+}
