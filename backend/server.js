@@ -1,28 +1,22 @@
 const admin = require('firebase-admin');
+console.log('Firebase admin imported');
+
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const app = express();
-app.use(express.json());
-app.use(cors());
-
-// Handle private key formatting
-let privateKey = process.env.FIREBASE_PRIVATE_KEY;
-if (privateKey && privateKey.startsWith('"')) {
-    privateKey = JSON.parse(privateKey);
-}
+console.log('About to initialize Firebase');
+console.log('PROJECT_ID:', process.env.FIREBASE_PROJECT_ID);
 
 try {
     admin.initializeApp({
         projectId: process.env.FIREBASE_PROJECT_ID,
-        privateKey: privateKey,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     });
-    console.log('Firebase initialized successfully');
-} catch (error) {
-    console.error('Firebase initialization error:', error);
-    process.exit(1);
+    console.log('Firebase initialized');
+} catch (e) {
+    console.error('Init error:', e.message);
 }
 
 const db = admin.firestore();
