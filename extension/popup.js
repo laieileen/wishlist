@@ -10,7 +10,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const userId = 'user123'; // Replace with actual auth later
 
         // POST to your backend
-        const response = await fetch('https://wishlist-backend.onrender.com/api/add-item', {
+        const response = await fetch('https://wishlist-yu2x.onrender.com', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
