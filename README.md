@@ -75,13 +75,38 @@ Keep `.env` out of Git. The backend health endpoint is `GET /`; item saves use `
 
 4. Create a Firebase service account for the backend and set its credentials as Render environment variables. Never commit the downloaded service-account JSON.
 
-## Use It
+## Using Keepsake (No Coding Required)
 
-1. Open the website and choose **Create account**. Use an email address and password of at least six characters.
-2. To recover a forgotten password, choose **Forgot password?**, enter the account email, and follow the reset link sent by Firebase.
-3. Install the extension in Chrome: open `chrome://extensions`, turn on **Developer mode**, choose **Load unpacked**, and select this repository's `extension/` directory.
-4. Open the extension on a regular `http://` or `https://` page, sign in with the same account, enter a price and category, then choose **Save to wishlist**.
-5. Return to the website to search, filter, revisit, or remove saved items.
+### What It Does
+
+Keepsake is a personal place to collect products you might want later. The website shows your saved items. The Chrome extension lets you save the page you are currently browsing, along with a price and category. It does not automatically detect the product price, so enter that yourself when saving.
+
+### Create an Account
+
+1. Open the [Keepsake website](https://laieileen.github.io/wishlist/).
+2. Choose **Create account**, enter your email, and create a password with at least six characters.
+3. Use this same email and password in the Chrome extension.
+4. If you forget your password, choose **Forgot password?** on the website or extension and follow the reset email instructions.
+
+### Install the Chrome Extension
+
+The extension is currently a local, unpacked Chrome extension, not an item in the Chrome Web Store. Chrome must be pointed to its folder on your computer, so these setup steps are needed once for each computer or Chrome profile.
+
+1. On the GitHub project page, choose **Code → Download ZIP**, then unzip the downloaded folder somewhere you can find it again.
+2. In Chrome, open `chrome://extensions`.
+3. Turn on **Developer mode**.
+4. Choose **Load unpacked** and select the `extension` folder inside the unzipped project folder. Select the `extension` folder itself, not the outer project folder.
+5. Open Chrome's Extensions menu (the puzzle-piece icon). You can pin Keepsake there for easier access.
+
+### Save and Find Something
+
+1. Visit a regular product page starting with `https://` or `http://`. Chrome does not let extensions read special pages such as `chrome://` pages or the Chrome Web Store.
+2. Open Keepsake from Chrome's Extensions menu.
+3. Sign in using your Keepsake account if asked.
+4. Enter the item's price and category, then choose **Save to wishlist**. The page title and address are filled in from the page you are viewing.
+5. Open the Keepsake website using the same account. The item should appear in your collection; use search or category filters to find it, or choose **Remove** to delete it.
+
+When the extension is updated, open `chrome://extensions` and choose its reload icon. If you move or delete the unzipped project folder, Chrome will no longer be able to load the extension until you select its new location.
 
 ## Deployments
 
