@@ -1,17 +1,19 @@
 {
     "manifest_version": 3,
-    "name": "Wishlist Saver",
+    "name": "Keepsake",
     "version": "1.0",
-    "description": "Save products to your wishlist",
+    "description": "Save finds to your personal wishlist",
     "permissions": [
         "activeTab",
-        "scripting"
+        "storage"
     ],
     "action": {
         "default_popup": "popup.html",
-        "default_title": "Save to Wishlist"
+        "default_title": "Save to Keepsake"
     },
     "host_permissions": [
-        "<all_urls>"
+        "https://wishlist-yu2x.onrender.com/*",
+        "https://identitytoolkit.googleapis.com/*",
+        "https://securetoken.googleapis.com/*"
     ]
 }
