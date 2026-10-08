@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { getFirestore, collection, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
+import AuthPanel from './components/AuthPanel';
+import ExtensionGuide from './components/ExtensionGuide';
+import WishlistBoard from './components/WishlistBoard';
 import './App.css';
 
 const firebaseConfig = {
@@ -21,9 +24,6 @@ const getAddedTime = (dateAdded) => {
   if (dateAdded?.seconds) return dateAdded.seconds * 1000;
   return 0;
 };
-
-const formatPrice = (price) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(price) || 0);
 
 export default function App() {
   const [items, setItems] = useState([]);
@@ -145,126 +145,36 @@ export default function App() {
       {!authReady ? (
         <main className="auth-loading" role="status">Checking your session...</main>
       ) : !user ? (
-        <main className="auth-layout">
-          <section className="auth-copy">
-            <p className="eyebrow">A LITTLE PLACE FOR THE THINGS YOU LOVE</p>
-            <h1>Your wishlist<span>.</span></h1>
-            <p className="intro-copy">Sign in to keep your finds together, wherever you browse.</p>
-          </section>
-          <section className="auth-form-panel" aria-labelledby="auth-heading">
-            <p className="eyebrow">YOUR COLLECTION, YOURS</p>
-            <h2 id="auth-heading">{authMode === 'signup' ? 'Create your account' : authMode === 'reset' ? 'Reset your password' : 'Welcome back'}</h2>
-            {authMode === 'reset' ? (
-              <button type="button" className="auth-link back-to-signin" onClick={() => { setAuthMode('signin'); setAuthFeedback(''); }}>Back to sign in</button>
-            ) : (
-              <div className="auth-mode" role="group" aria-label="Account action">
-                <button type="button" className={authMode === 'signin' ? 'active' : ''} onClick={() => { setAuthMode('signin'); setAuthFeedback(''); }}>Sign in</button>
-                <button type="button" className={authMode === 'signup' ? 'active' : ''} onClick={() => { setAuthMode('signup'); setAuthFeedback(''); }}>Create account</button>
-              </div>
-            )}
-            <form className="auth-form" onSubmit={handleAuthSubmit}>
-              <label htmlFor="email">Email</label>
-              <input id="email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
-              {authMode !== 'reset' && <>
-                <label htmlFor="password">Password</label>
-                <input id="password" type="password" autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'} minLength="6" required value={password} onChange={(event) => setPassword(event.target.value)} />
-              </>}
-              {authFeedback && <p className={`auth-feedback ${authFeedbackType}`} role={authFeedbackType === 'error' ? 'alert' : 'status'}>{authFeedback}</p>}
-              <button className="auth-submit" type="submit" disabled={authBusy}>
-                {authBusy ? 'Please wait...' : authMode === 'signup' ? 'Create account' : authMode === 'reset' ? 'Send reset email' : 'Sign in'}
-              </button>
-              {authMode === 'signin' && <button type="button" className="auth-link" onClick={() => { setAuthMode('reset'); setAuthFeedback(''); }}>Forgot password?</button>}
-            </form>
-          </section>
-        </main>
+        <AuthPanel
+          authMode={authMode}
+          setAuthMode={(mode) => { setAuthMode(mode); setAuthFeedback(''); }}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          authBusy={authBusy}
+          authFeedback={authFeedback}
+          authFeedbackType={authFeedbackType}
+          onSubmit={handleAuthSubmit}
+        />
       ) : (
-        <main>
-          <section className="intro">
-            <div>
-              <p className="eyebrow">A LITTLE PLACE FOR THE THINGS YOU LOVE</p>
-              <h1>Your wishlist<span>.</span></h1>
-              <p className="intro-copy">Good finds, saved for the right moment.</p>
-            </div>
-            <div className="collection-stats" aria-label="Wishlist summary">
-              <div><strong>{items.length}</strong><span>{items.length === 1 ? 'saved item' : 'saved items'}</span></div>
-              <div><strong>{formatPrice(totalValue)}</strong><span>total wishlist value</span></div>
-            </div>
-          </section>
-
-          <section className="collection" aria-label="Saved items">
-            <div className="collection-heading">
-              <div>
-                <p className="eyebrow">THE COLLECTION</p>
-                <h2>Saved things <span>{items.length}</span></h2>
-              </div>
-              <label className="search-box">
-                <span aria-hidden="true">Search</span>
-                <input
-                  type="search"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Find something..."
-                  aria-label="Search wishlist"
-                />
-              </label>
-            </div>
-
-            <div className="filters" aria-label="Filter by category">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setFilter(category)}
-                  className={filter === category ? 'active' : ''}
-                  aria-pressed={filter === category}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-
-            {error && <p className="notice error-notice" role="alert">{error}</p>}
-            {loading ? (
-              <div className="collection-message" role="status">Gathering your saved things...</div>
-            ) : filtered.length > 0 ? (
-              <div className="items-grid">
-                {filtered.map((item) => {
-                  const category = item.category || 'Uncategorized';
-                  return (
-                    <article key={item.id} className="item-card">
-                      <div className="item-topline">
-                        <span className="item-initial" aria-hidden="true">{(item.title || '?').trim().charAt(0).toUpperCase()}</span>
-                        <span className="category">{category}</span>
-                      </div>
-                      <h3>{item.url ? <a href={item.url} target="_blank" rel="noopener noreferrer">{item.title || 'Untitled item'}</a> : item.title || 'Untitled item'}</h3>
-                      <div className="item-footer">
-                        <p className="price">{formatPrice(item.price)}</p>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(item.id)}
-                          className="delete-btn"
-                          disabled={deletingId === item.id}
-                          aria-label={`Remove ${item.title || 'item'}`}
-                        >
-                          {deletingId === item.id ? 'Removing...' : 'Remove'}
-                        </button>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="collection-message empty-state">
-                <span className="empty-mark" aria-hidden="true">+</span>
-                <h3>{items.length === 0 ? 'Your next favorite starts here.' : 'Nothing in this corner yet.'}</h3>
-                <p>{items.length === 0 ? 'Save something from the browser extension and it will show up here.' : 'Try another category or search for a different item.'}</p>
-                {items.length > 0 && (filter !== 'All' || query) && <button type="button" onClick={() => { setFilter('All'); setQuery(''); }}>Clear filters</button>}
-              </div>
-            )}
-          </section>
-        </main>
+        <WishlistBoard
+          items={items}
+          filtered={filtered}
+          categories={categories}
+          filter={filter}
+          setFilter={setFilter}
+          query={query}
+          setQuery={setQuery}
+          totalValue={totalValue}
+          loading={loading}
+          error={error}
+          deletingId={deletingId}
+          onDelete={handleDelete}
+        />
       )}
-      <footer className="site-footer"><span>Collected with care.</span><span>KEEPSAKE / WISHLIST</span></footer>
+      {authReady && <ExtensionGuide />}
+      {authReady && <footer className="site-footer"><span>Collected with care.</span><span>KEEPSAKE / WISHLIST</span></footer>}
     </div>
   );
 }

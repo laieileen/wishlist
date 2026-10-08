@@ -14,13 +14,16 @@
 
         :root {
             color-scheme: light;
-            --ink: #252d27;
-            --muted: #777d73;
-            --line: #e5e4da;
-            --paper: #f7f6f0;
-            --leaf: #315b45;
-            --leaf-wash: #e8eee5;
-            --clay: #c8795d;
+            --ink: #342f32;
+            --muted: #82777a;
+            --line: #e9dfe0;
+            --paper: #faf6f3;
+            --leaf: #54745f;
+            --leaf-wash: #e7efe6;
+            --clay: #c77e81;
+            --blush: #f5e4e4;
+            --sky: #e3edf0;
+            --butter: #f6efd9;
         }
 
         body {
@@ -28,12 +31,13 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--ink);
             background-color: var(--paper);
-            background-image: linear-gradient(rgba(49, 91, 69, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(49, 91, 69, 0.025) 1px, transparent 1px);
-            background-size: 24px 24px;
+            background-image: radial-gradient(ellipse at 0% 0%, rgba(245, 228, 228, 0.8), transparent 44%), linear-gradient(rgba(113, 91, 91, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(113, 91, 91, 0.025) 1px, transparent 1px);
+            background-size: auto, 24px 24px, 24px 24px;
         }
 
         .container {
             padding: 23px 22px 20px;
+            background: rgba(255, 253, 250, 0.48);
         }
 
         .topline {
@@ -60,7 +64,8 @@
             place-items: center;
             border-radius: 50% 50% 50% 4px;
             color: white;
-            background: var(--leaf);
+            background: var(--clay);
+            border-radius: 50% 50% 50% 6px;
             font: 15px Georgia, serif;
         }
 
@@ -100,12 +105,12 @@
             width: 100%;
             min-height: 40px;
             padding: 9px 11px;
-            border: 1px solid #d9d9ce;
-            border-radius: 3px;
+            border: 1px solid #e5d9da;
+            border-radius: 6px;
             font-size: 14px;
             font-family: inherit;
             color: var(--ink);
-            background: rgba(255, 254, 250, 0.8);
+            background: rgba(255, 253, 250, 0.88);
         }
 
         input:focus {
@@ -143,10 +148,10 @@
             top: 100%;
             left: 0;
             right: 0;
-            background: #fffefa;
+            background: #fffdfa;
             border: 1px solid var(--line);
             border-top: none;
-            border-radius: 0 0 3px 3px;
+            border-radius: 0 0 6px 6px;
             max-height: 150px;
             overflow-y: auto;
             display: none;
@@ -160,7 +165,7 @@
         .suggestion-item {
             padding: 10px 11px;
             cursor: pointer;
-            border-bottom: 1px solid #f0efe8;
+            border-bottom: 1px solid #f0e7e6;
             font-size: 12px;
         }
 
@@ -198,7 +203,7 @@
         }
 
         button:hover:not(:disabled) {
-            background: #254735;
+            background: #45634f;
         }
 
         button:disabled {
@@ -259,7 +264,7 @@
         }
 
         .text-button:hover:not(:disabled) {
-            color: #254735;
+            color: #45634f;
             background: transparent;
             text-decoration: underline;
             text-underline-offset: 3px;
