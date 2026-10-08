@@ -115,6 +115,30 @@ document.getElementById('auth-form').addEventListener('submit', async (event) =>
     }
 });
 
+document.getElementById('forgot-password').addEventListener('click', async () => {
+    const emailInput = document.getElementById('login-email');
+    const resetButton = document.getElementById('forgot-password');
+    const email = emailInput.value.trim();
+    if (!emailInput.reportValidity()) return;
+
+    resetButton.disabled = true;
+    resetButton.textContent = 'Sending...';
+    setStatus(authStatus, '');
+    try {
+        await requestJson(`${AUTH_URL}/accounts:sendOobCode?key=${FIREBASE_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ requestType: 'PASSWORD_RESET', email }),
+        });
+        setStatus(authStatus, 'Password reset email sent. Check your inbox.', 'success');
+    } catch {
+        setStatus(authStatus, 'Could not send a reset email. Check the address and try again.', 'error');
+    } finally {
+        resetButton.disabled = false;
+        resetButton.textContent = 'Forgot password?';
+    }
+});
+
 document.getElementById('sign-out').addEventListener('click', async () => {
     idToken = '';
     await chrome.storage.local.remove(['refreshToken', 'email']);
